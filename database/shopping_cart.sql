@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 28, 2021 at 12:27 PM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.2.14
+-- Generation Time: Sep 21, 2025 at 06:34 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -21,6 +20,29 @@ SET time_zone = "+00:00";
 --
 -- Database: `shopping_cart`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_bank`
+--
+
+CREATE TABLE `tbl_bank` (
+  `b_id` int(11) NOT NULL,
+  `b_name` varchar(100) NOT NULL,
+  `b_type` varchar(100) NOT NULL,
+  `b_number` varchar(20) NOT NULL,
+  `b_owner` varchar(100) NOT NULL,
+  `bn_name` varchar(100) NOT NULL,
+  `b_logo` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `tbl_bank`
+--
+
+INSERT INTO `tbl_bank` (`b_id`, `b_name`, `b_type`, `b_number`, `b_owner`, `bn_name`, `b_logo`) VALUES
+(2, 'กสิกรไทย', 'ออมทรัพย์', '1973324175', 'ก้องภพ ปานเปีย', 'กาญจนบุรี', '48756020220250913_012405.jpg');
 
 -- --------------------------------------------------------
 
@@ -38,18 +60,99 @@ CREATE TABLE `tbl_member` (
   `m_tel` varchar(20) NOT NULL,
   `m_address` varchar(200) NOT NULL,
   `m_img` varchar(250) NOT NULL,
-  `date_save` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `date_save` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `tbl_member`
 --
 
 INSERT INTO `tbl_member` (`member_id`, `m_user`, `m_pass`, `m_level`, `m_name`, `m_email`, `m_tel`, `m_address`, `m_img`, `date_save`) VALUES
-(1, 'admin', 'admin', 'admin', 'admin_dev', 'devtai@gmail.com', '0983738651', 'กรุงเทพมหานคร', '92306749720210628_000204.png', '2021-06-01 19:04:28'),
-(2, 'member', '55', 'member', 'member', 'waiyawoot@gmail.com', '0931294710', 'กรุงเทพมหานคร', '145010926420210602_090554.png', '2021-06-01 19:05:54'),
-(3, 'member41', '11', 'member', 'wootsaro', 'devtai2@gmail.com', '0852134657', 'กรุงเทพมหานคร', '99698979420210626_224421.png', '2021-06-01 19:06:39'),
-(4, 'admino', '15634568456', 'admin', 'admin somi', 'devtai410@gmail.com', '0897444124', 'กรุงเทพมหานคร', '171855469020210602_090904.png', '2021-06-01 19:09:04');
+(4, 'admin', '123456', 'admin', 'kongphop', '67124590119@gmail.com', '0929149862', 'kanchanaburi', '170779789520250917_231412.PNG', '2021-06-01 19:09:04'),
+(5, 'member', '123456', 'member', 'member', 'member@gmail.com', '123665544', 'kanchanaburi', 'm_1758466951.jpg', '2025-09-12 17:22:29'),
+(6, 'solo', '123456', 'member', 'solo', 'solo@gmail.com', '0922222', '66/77', '62240408120250918_003910.png', '2025-09-17 17:26:12'),
+(7, 'best', '123456', 'member', 'best1305', 'best@gmail.com', '0929149862', '66/7', '55971813820250918_003654.jpg', '2025-09-17 17:36:54');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_order`
+--
+
+CREATE TABLE `tbl_order` (
+  `o_id` int(11) NOT NULL,
+  `o_date` datetime NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `status` enum('pending','paid','shipped','completed','cancelled') DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_order`
+--
+
+INSERT INTO `tbl_order` (`o_id`, `o_date`, `member_id`, `total`, `status`) VALUES
+(1, '2025-09-19 20:35:24', 5, 759.00, ''),
+(2, '2025-09-19 20:41:06', 5, 759.00, ''),
+(3, '2025-09-19 20:42:13', 5, 879.00, ''),
+(4, '2025-09-21 20:17:39', 5, 759.00, ''),
+(5, '2025-09-21 20:21:28', 5, 879.00, ''),
+(6, '2025-09-21 22:37:40', 4, 759.00, 'paid');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_order_detail`
+--
+
+CREATE TABLE `tbl_order_detail` (
+  `od_id` int(11) NOT NULL,
+  `o_id` int(11) NOT NULL,
+  `p_id` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `p_price` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_order_detail`
+--
+
+INSERT INTO `tbl_order_detail` (`od_id`, `o_id`, `p_id`, `qty`, `p_price`) VALUES
+(1, 2, 5, 1, 0),
+(2, 3, 5, 1, 0),
+(3, 3, 6, 1, 0),
+(4, 4, 5, 1, 0),
+(5, 5, 6, 1, 0),
+(6, 5, 5, 1, 0),
+(7, 6, 5, 1, 759);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_payment`
+--
+
+CREATE TABLE `tbl_payment` (
+  `pay_id` int(11) NOT NULL,
+  `o_id` int(11) NOT NULL,
+  `bank_id` int(11) NOT NULL,
+  `pay_amount` decimal(10,2) NOT NULL,
+  `pay_date` date NOT NULL,
+  `pay_time` time NOT NULL,
+  `pay_slip` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `tbl_payment`
+--
+
+INSERT INTO `tbl_payment` (`pay_id`, `o_id`, `bank_id`, `pay_amount`, `pay_date`, `pay_time`, `pay_slip`) VALUES
+(1, 5, 2, 879.00, '2025-09-21', '21:41:00', 'slip_1758465955.png'),
+(2, 1, 2, 759.00, '2025-09-21', '21:49:00', 'slip_1758466160.png'),
+(3, 6, 2, 796.00, '2025-09-21', '22:39:00', 'slip_1758469201.JPG'),
+(4, 3, 2, 999.00, '2025-09-21', '22:41:00', 'slip_1758469270.jpg'),
+(5, 2, 2, 999.00, '2025-09-21', '22:41:00', 'slip_1758469315.JPG'),
+(6, 4, 2, 888.00, '2025-09-21', '22:42:00', 'slip_1758469340.jpg');
 
 -- --------------------------------------------------------
 
@@ -66,19 +169,17 @@ CREATE TABLE `tbl_product` (
   `p_price` int(11) NOT NULL,
   `p_qty` varchar(11) NOT NULL,
   `p_unit` varchar(20) NOT NULL,
-  `p_view` int(10) NOT NULL DEFAULT '0',
-  `datesave` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `p_view` int(10) NOT NULL DEFAULT 0,
+  `datesave` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `tbl_product`
 --
 
 INSERT INTO `tbl_product` (`p_id`, `p_name`, `type_id`, `p_detail`, `p_img`, `p_price`, `p_qty`, `p_unit`, `p_view`, `datesave`) VALUES
-(1, 'เค้กบราวนี่หน้านิ่ม', 2, ' มีลักษณะเนื้อฉ่ำแน่น รสชาติเข้มข้น มีสัดส่วนของช็อกโกแลตสูงและสัดส่วนของแป้งจะน้อยกว่าแบบอื่น หน้ามีความกรอบ หรืออาจเรียกได้ว่า บราวนี่หน้ากรอบ ', '57506687220210626_233828.jpg', 120, '12', 'ชิ้น', 0, '2021-06-26 16:38:28'),
-(2, 'เค้กบราวนี่หน้านิ่ม', 1, 'มีลักษณะเนื้อฉ่ำแน่น รสชาติเข้มข้น มีสัดส่วนของช็อกโกแลตสูงและสัดส่วนของแป้งจะน้อยกว่าแบบอื่น หน้ามีความกรอบ หรืออาจเรียกได้ว่า บราวนี่หน้ากรอบ', '103563202620210626_234613.jpg', 200, '10', 'กล่อง', 0, '2021-06-26 16:46:13'),
-(3, 'เค้กบราวนี่หน้านิ่ม', 3, 'มีลักษณะเนื้อฉ่ำแน่น รสชาติเข้มข้น มีสัดส่วนของช็อกโกแลตสูงและสัดส่วนของแป้งจะน้อยกว่าแบบอื่น หน้ามีความกรอบ หรืออาจเรียกได้ว่า บราวนี่หน้ากรอบ', '66496319120210626_234635.jpg', 100, '10', 'อัน', 0, '2021-06-26 16:46:35'),
-(4, 'เค้กบราวนี่หน้านิ่ม', 4, 'มีลักษณะเนื้อฉ่ำแน่น รสชาติเข้มข้น มีสัดส่วนของช็อกโกแลตสูงและสัดส่วนของแป้งจะน้อยกว่าแบบอื่น หน้ามีความกรอบ หรืออาจเรียกได้ว่า บราวนี่หน้ากรอบ', '184682101020210628_164258.jpg', 120, '15', 'กล่อง', 0, '2021-06-26 16:46:51');
+(5, 'boss', 4, 'ิbossมืด1ตัว รูบี้ 3200 ', '117037637820250917_230818.jpg', 759, '-3', 'อัน', 34, '2025-09-17 16:08:18'),
+(6, 'ฟูทีมMIlano FC', 5, 'ฟูทีมmilan เมต้า 160,000M', '83375668920250917_231945.jpg', 120, '-1', 'ไอดี', 17, '2025-09-17 16:19:45');
 
 -- --------------------------------------------------------
 
@@ -89,27 +190,56 @@ INSERT INTO `tbl_product` (`p_id`, `p_name`, `type_id`, `p_detail`, `p_img`, `p_
 CREATE TABLE `tbl_type` (
   `type_id` int(11) NOT NULL,
   `type_name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `tbl_type`
 --
 
 INSERT INTO `tbl_type` (`type_id`, `type_name`) VALUES
-(1, 'อุปกรณ์เครื่องใช้'),
-(2, 'อาหารและเครื่องดื่ม'),
-(3, 'เครื่องตกแต่งภายใน'),
-(4, 'อุปกรณ์เทคโนโลยี');
+(1, 'Roblox'),
+(2, 'Free Fire'),
+(3, 'Rov'),
+(4, 'Line Ranger'),
+(5, 'fc online');
 
 --
 -- Indexes for dumped tables
 --
 
 --
+-- Indexes for table `tbl_bank`
+--
+ALTER TABLE `tbl_bank`
+  ADD PRIMARY KEY (`b_id`);
+
+--
 -- Indexes for table `tbl_member`
 --
 ALTER TABLE `tbl_member`
   ADD PRIMARY KEY (`member_id`);
+
+--
+-- Indexes for table `tbl_order`
+--
+ALTER TABLE `tbl_order`
+  ADD PRIMARY KEY (`o_id`),
+  ADD KEY `member_id` (`member_id`);
+
+--
+-- Indexes for table `tbl_order_detail`
+--
+ALTER TABLE `tbl_order_detail`
+  ADD PRIMARY KEY (`od_id`),
+  ADD KEY `o_id` (`o_id`),
+  ADD KEY `p_id` (`p_id`);
+
+--
+-- Indexes for table `tbl_payment`
+--
+ALTER TABLE `tbl_payment`
+  ADD PRIMARY KEY (`pay_id`),
+  ADD KEY `o_id` (`o_id`);
 
 --
 -- Indexes for table `tbl_product`
@@ -128,22 +258,69 @@ ALTER TABLE `tbl_type`
 --
 
 --
+-- AUTO_INCREMENT for table `tbl_bank`
+--
+ALTER TABLE `tbl_bank`
+  MODIFY `b_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `tbl_member`
 --
 ALTER TABLE `tbl_member`
-  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `tbl_order`
+--
+ALTER TABLE `tbl_order`
+  MODIFY `o_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `tbl_order_detail`
+--
+ALTER TABLE `tbl_order_detail`
+  MODIFY `od_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `tbl_payment`
+--
+ALTER TABLE `tbl_payment`
+  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tbl_product`
 --
 ALTER TABLE `tbl_product`
-  MODIFY `p_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `p_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tbl_type`
 --
 ALTER TABLE `tbl_type`
-  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `tbl_order`
+--
+ALTER TABLE `tbl_order`
+  ADD CONSTRAINT `tbl_order_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `tbl_member` (`member_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `tbl_order_detail`
+--
+ALTER TABLE `tbl_order_detail`
+  ADD CONSTRAINT `tbl_order_detail_ibfk_1` FOREIGN KEY (`o_id`) REFERENCES `tbl_order` (`o_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `tbl_order_detail_ibfk_2` FOREIGN KEY (`p_id`) REFERENCES `tbl_product` (`p_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `tbl_payment`
+--
+ALTER TABLE `tbl_payment`
+  ADD CONSTRAINT `tbl_payment_ibfk_1` FOREIGN KEY (`o_id`) REFERENCES `tbl_order` (`o_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
